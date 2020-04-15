@@ -81,31 +81,42 @@ atexit.register(exit_handler)
 
 def setup_app(app):
     mongoClient = __get_mongo_connection()
+    
 
     db = mongoClient.event_scrape
-    for key in ds_to_collection_names:
-        entry = db[ds_to_collection_names[key]].find_one()
-        fields = list(entry.keys())
-        fields_map[key] = fields
-        projection_map[key] = {}
-        for field in fields:
-            projection_map[key][field] = 1
+    collection = db.test_collection
 
-    userInfo = db.event_users.find_one({"email": "project2422@gmail.com"})
+    test_data = {
+        "name": "kawser",
+        "age": 22,
+        "location": "dallas"
+    }
 
-    if userInfo is None:
-        userInfo = {}
-        userInfo["firstName"] = "Happy"
-        userInfo["lastName"] = "Tester"
-        userInfo["email"] = "project2422@gmail.com"
-        userInfo["apiKey"] = "CD75737EF4CAC292EE17B85AAE4B6"
+    rec_id1 = collection.insert_one(test_data)
 
-        db.event_users.insert(userInfo)
+    # for key in ds_to_collection_names:
+    #     entry = db[ds_to_collection_names[key]].find_one()
+    #     fields = list(entry.keys())
+    #     fields_map[key] = fields
+    #     projection_map[key] = {}
+    #     for field in fields:
+    #         projection_map[key][field] = 1
 
-    print (locate_user("test", db))
+    # userInfo = db.event_users.find_one({"email": "project2422@gmail.com"})
+
+    # if userInfo is None:
+    #     userInfo = {}
+    #     userInfo["firstName"] = "Happy"
+    #     userInfo["lastName"] = "Tester"
+    #     userInfo["email"] = "project2422@gmail.com"
+    #     userInfo["apiKey"] = "CD75737EF4CAC292EE17B85AAE4B6"
+
+    #     db.event_users.insert(userInfo)
+
+    # print (locate_user("test", db))
 
 
-    print ("Initialization Complete.")
+    # print ("Initialization Complete.")
 
 
 
@@ -159,14 +170,14 @@ def query_formatter(query):
 
 def __get_mongo_connection():
     # For local debugging
-    MONGO_SERVER_IP = "172.29.100.22"
-    MONGO_PORT = "3154"
-    MONGO_USER = "event_reader"
-    MONGO_PSWD = "dml2016"
-    NUM_ARTICLES = 1000
+    # MONGO_SERVER_IP = "172.29.100.22"
+    # MONGO_PORT = "3154"
+    # MONGO_USER = "event_reader"
+    # MONGO_PSWD = "dml2016"
+    # NUM_ARTICLES = 1000
 
-    password = urllib.parse.quote_plus(MONGO_PSWD)
-    return MongoClient('mongodb://' + MONGO_USER + ':' + password + '@' + MONGO_SERVER_IP + ":" + MONGO_PORT)
+    # password = urllib.parse.quote_plus(MONGO_PSWD)
+    return MongoClient("mongodb://admin:admin@cluster0-shard-00-00-jis28.gcp.mongodb.net:27017,cluster0-shard-00-01-jis28.gcp.mongodb.net:27017,cluster0-shard-00-02-jis28.gcp.mongodb.net:27017/test?ssl=true&ssl_cert_reqs=CERT_NONE&replicaSet=Cluster0-shard-0&authSource=admin&retryWrites=true&w=majority")
     #return MongoClient(host="127.0.0.1")
 
 def get_result(dataset, query=None, aggregate=None, projection=None, unique=None, limit=0):
