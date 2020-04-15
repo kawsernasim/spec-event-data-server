@@ -17,8 +17,8 @@ import atexit
 from Test import add_user
 from Test import send_api_key
 from Test import locate_user
-reload(sys)
-sys.setdefaultencoding('utf8')
+# reload(sys)
+# sys.setdefaultencoding('utf8')
 
 
 class Stopwatch:
@@ -165,7 +165,7 @@ def __get_mongo_connection():
     MONGO_PSWD = "dml2016"
     NUM_ARTICLES = 1000
 
-    password = urllib.quote_plus(MONGO_PSWD)
+    password = urllib.parse.quote_plus(MONGO_PSWD)
     return MongoClient('mongodb://' + MONGO_USER + ':' + password + '@' + MONGO_SERVER_IP + ":" + MONGO_PORT)
     #return MongoClient(host="127.0.0.1")
 
