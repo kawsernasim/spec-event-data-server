@@ -84,15 +84,15 @@ def setup_app(app):
     
 
     db = mongoClient.event_scrape
-    collection = db.test_collection
 
-    test_data = {
-        "name": "kawser",
-        "age": 22,
-        "location": "dallas"
-    }
+    query = requests.get('http://eventdata.utdallas.edu/api/data?api_key=dc9diecstUU71qvy7WBtYLNDJ1kWxy78&datasource=phoenix_rt&query=%7B%22code%22:%22010%22,%22latitude%22:%7B%22$gt%22:36.0,%22$lt%22:70.0%7D,%22longitude%22:%7B%22$gt%22:-15.0,%22$lt%22:60.0%7D%7D&select=geoname,source,target')
+    data = query.json()
 
-    rec_id1 = collection.insert_one(test_data)
+    collection = db.sample_queries
+
+    insert_record = collection.insert_one(data)
+
+
 
     # for key in ds_to_collection_names:
     #     entry = db[ds_to_collection_names[key]].find_one()
