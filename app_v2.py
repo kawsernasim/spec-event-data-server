@@ -75,7 +75,7 @@ projection_map = {}
 fields_map = {}
 
 def exit_handler():
-    print "Exiting from the server"
+    print ("Exiting from the server")
 
 atexit.register(exit_handler)
 
@@ -102,10 +102,10 @@ def setup_app(app):
 
         db.event_users.insert(userInfo)
 
-    print locate_user("test", db)
+    print (locate_user("test", db))
 
 
-    print "Initialization Complete."
+    print ("Initialization Complete.")
 
 
 
@@ -180,11 +180,11 @@ def get_result(dataset, query=None, aggregate=None, projection=None, unique=None
         mongoClient = __get_mongo_connection()
         db = mongoClient.event_scrape
 
-        print db.collection_names()
+        print (db.collection_names())
         #print "Searching ", ds_to_collection_names[dataset]
         # Set the collection based on dataset
         collectionName = ds_to_collection_names[dataset]
-        print collectionName
+        print (collectionName)
         # if collectionName == 'phoenix_events':
         #     print "Matched"
         # else:
@@ -193,9 +193,9 @@ def get_result(dataset, query=None, aggregate=None, projection=None, unique=None
         collection = db[collectionName]
         clock.end()
 
-        print "Time Required to get collection is ", str(clock.elapsed_seconds()), " seconds"
+        print ("Time Required to get collection is ", str(clock.elapsed_seconds()), " seconds")
 
-        print "Collection Found"
+        print ("Collection Found")
 
 
     except ConnectionFailure:
@@ -218,7 +218,7 @@ def get_result(dataset, query=None, aggregate=None, projection=None, unique=None
             clock.begin()
             cursor = collection.find(query, proj_dict).limit(limit)
             clock.end()
-            print "Time Required to complete collection.find is ", str(clock.elapsed_seconds()), " seconds"
+            print ("Time Required to complete collection.find is ", str(clock.elapsed_seconds()), " seconds")
 
             if unique:
                 cursor = cursor.distinct(unique)
@@ -230,7 +230,7 @@ def get_result(dataset, query=None, aggregate=None, projection=None, unique=None
         clock.begin()
         response = '{"status": "success", "data": ' + dumps(list(cursor), default=json_util.default) + "}"
         clock.end()
-        print "Time Required to dumping data to json is ", str(clock.elapsed_seconds()), " seconds"
+        print ("Time Required to dumping data to json is ", str(clock.elapsed_seconds()), " seconds")
 
         #cursor.close()
         #mongoClient.close()
@@ -416,10 +416,10 @@ def get_data():
     limit = 0
     try:
         limit = int(request.args.get('limit'))
-    except Exception, e:
-        print "Non numeric limit set by user, assuming NO LIMIT"
+    except Exception as e:
+        print ("Non numeric limit set by user, assuming NO LIMIT")
 
-    print dataset
+    print (dataset)
 
     try:
         if not __verify_access(api_key_received): raise ValueError("Invalid API key")
@@ -484,7 +484,7 @@ def get_data():
         db.access_log.insert(log_message)
         mongo_client.close()
         if size_only:
-            print len(response_data)
+            print (len(response_data))
             response_data = json.dumps({"size": len(response_data)})
         resp = Response(response_data, mimetype='application/json')
 
@@ -523,11 +523,11 @@ def signup():
     position = request.args.get("position")
     purpose = request.args.get("purpose")
 
-    print "Inside signup method"
+    print ("Inside signup method")
 
     g_recaptcha_response = request.args.get("g-recaptcha-response")
 
-    print "Captcha response: ", g_recaptcha_response
+    print ("Captcha response: ", g_recaptcha_response)
     remote_ip = request.remote_addr
 
     data = {"secret": "6LfyNUEUAAAAAJrb1GA0Pski-Gsvs9CP-yxFpVuE", "response": g_recaptcha_response}
@@ -539,7 +539,7 @@ def signup():
         ret_value = json.loads(res.content)
         if firstName == "" or lastName == "" or email == "" or country == "" or organization == "" or position == "" or purpose == "":
             raise Exception("Empty field not acceptable")
-        print ret_value['success']
+        print (ret_value['success'])
         if g_recaptcha_response == "":
             raise Exception("Captcha Verification Failed")
 
